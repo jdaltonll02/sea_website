@@ -1,0 +1,6 @@
+# Administrative letters are never linked directly; every download must go
+# through /pages/letter-download.php so the visibility check (public /
+# clergy_only / staff_only) is enforced server-side. Block direct HTTP access
+# to this directory outright — the gate reads files straight off disk via
+# readfile(), so this does not affect legitimate downloads.
+Require all denied

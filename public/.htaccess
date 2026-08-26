@@ -1,0 +1,6 @@
+Options -Indexes
+ErrorDocument 404 /pages/404.php
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+</IfModule>

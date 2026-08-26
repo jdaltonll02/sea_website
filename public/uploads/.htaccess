@@ -1,0 +1,8 @@
+# Uploaded files must never be executed as scripts, even if an attacker
+# manages to smuggle a disguised file past the extension/MIME checks in
+# admin/includes/admin-functions.php's handle_file_upload().
+<FilesMatch "\.(php|phtml|php\d)$">
+  Require all denied
+</FilesMatch>
+
+Options -Indexes -ExecCGI

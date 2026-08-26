@@ -1,0 +1,280 @@
+/* ==========================================================================
+   Southeastern Archdeaconry — Episcopal Church of Liberia
+   Theme: white base, deep green + deep yellow accents, cream/gold highlight
+   (green/white/yellow — the Southeastern counties' colors, not red/white/blue)
+   ========================================================================== */
+
+:root {
+  /* Token names kept as -red/-blue for compatibility with existing var() references
+     throughout the codebase; the values themselves now hold the deep yellow/green brand colors. */
+  --saa-white: #FFFFFF;
+  --saa-red: #A16207;
+  --saa-red-dark: #713F12;
+  --saa-blue: #14532D;
+  --saa-blue-light: #15803D;
+  --saa-cream: #F5F1E8;
+  --saa-gold: #D4AF37;
+  --saa-ink: #23262b;
+  --saa-muted: #6b7280;
+
+  --font-heading: 'Playfair Display', 'Georgia', serif;
+  --font-body: 'Inter', 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--saa-ink);
+  background-color: var(--saa-white);
+}
+
+h1, h2, h3, h4, h5, h6,
+.font-heading {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--saa-blue);
+}
+
+a {
+  color: var(--saa-red);
+}
+a:hover {
+  color: var(--saa-red-dark);
+}
+
+/* --------------------------------------------------------------------
+   Liturgical divider motif — a thin green/white/yellow rule used between
+   sections, echoing a stole trim
+   -------------------------------------------------------------------- */
+.saa-divider {
+  height: 6px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--saa-blue) 0%, var(--saa-white) 50%, var(--saa-red) 100%);
+  border: 0;
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------
+   Navbar
+   -------------------------------------------------------------------- */
+.saa-navbar {
+  background-color: var(--saa-blue);
+  border-bottom: 4px solid var(--saa-red);
+}
+.saa-navbar .brand-text {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--saa-white);
+}
+.saa-navbar .nav-link {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+}
+.saa-navbar .nav-link.active,
+.saa-navbar .nav-link:hover {
+  color: var(--saa-gold);
+}
+.saa-navbar .dropdown-menu {
+  background-color: var(--saa-blue);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.saa-navbar .dropdown-item {
+  color: rgba(255, 255, 255, 0.85);
+}
+.saa-navbar .dropdown-item:hover,
+.saa-navbar .dropdown-item:focus {
+  background-color: var(--saa-blue-light);
+  color: var(--saa-gold);
+}
+
+.saa-btn-accent {
+  background-color: var(--saa-red);
+  border-color: var(--saa-red);
+  color: var(--saa-white);
+  font-weight: 600;
+}
+.saa-btn-accent:hover {
+  background-color: var(--saa-red-dark);
+  border-color: var(--saa-red-dark);
+  color: var(--saa-white);
+}
+
+/* --------------------------------------------------------------------
+   Hero
+   -------------------------------------------------------------------- */
+.saa-hero {
+  position: relative;
+  min-height: 78vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  color: var(--saa-white);
+}
+.saa-hero .carousel,
+.saa-hero .carousel-inner,
+.saa-hero .carousel-item {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+}
+.saa-hero .carousel-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.saa-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(11, 37, 69, 0.75) 0%, rgba(11, 37, 69, 0.55) 45%, rgba(139, 26, 26, 0.55) 100%);
+}
+.saa-hero-content {
+  position: relative;
+  z-index: 2;
+}
+.saa-hero-content h1 {
+  color: var(--saa-white);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+.saa-hero-accent-line {
+  width: 120px;
+  height: 5px;
+  background-color: var(--saa-red);
+  border-radius: 3px;
+  margin: 1rem 0 1.5rem;
+}
+
+/* --------------------------------------------------------------------
+   Stats banner
+   -------------------------------------------------------------------- */
+.saa-stats-banner {
+  background-color: var(--saa-blue);
+  color: var(--saa-white);
+  padding: 3rem 0;
+}
+.saa-stats-banner .stat-number {
+  font-family: var(--font-heading);
+  font-size: 2.75rem;
+  font-weight: 800;
+  color: var(--saa-gold);
+}
+.saa-stats-banner .stat-label {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* --------------------------------------------------------------------
+   Section utility
+   -------------------------------------------------------------------- */
+.saa-section {
+  padding: 4.5rem 0;
+}
+.saa-section-cream {
+  background-color: var(--saa-cream);
+}
+.saa-section-heading {
+  margin-bottom: 2.5rem;
+}
+.saa-section-heading .eyebrow {
+  color: var(--saa-red);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+/* --------------------------------------------------------------------
+   Cards
+   -------------------------------------------------------------------- */
+.saa-card {
+  border: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 6px 24px rgba(11, 37, 69, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  height: 100%;
+}
+.saa-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(11, 37, 69, 0.14);
+}
+.saa-card img {
+  height: 200px;
+  object-fit: cover;
+}
+.saa-card .card-body {
+  border-top: 3px solid var(--saa-gold);
+}
+
+/* --------------------------------------------------------------------
+   Today in the Church widget
+   -------------------------------------------------------------------- */
+.saa-today-widget {
+  border-left: 5px solid var(--saa-red);
+  background-color: var(--saa-white);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 6px 24px rgba(11, 37, 69, 0.08);
+}
+.saa-today-widget .liturgical-color-swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+  border: 1px solid rgba(0,0,0,0.15);
+}
+
+/* --------------------------------------------------------------------
+   Newsletter band
+   -------------------------------------------------------------------- */
+.saa-newsletter-band {
+  background-color: var(--saa-red);
+  color: var(--saa-white);
+  padding: 3.5rem 0;
+}
+.saa-newsletter-band h3 {
+  color: var(--saa-white);
+}
+
+/* --------------------------------------------------------------------
+   Footer
+   -------------------------------------------------------------------- */
+.saa-footer {
+  background-color: var(--saa-blue);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 3.5rem 0 1.5rem;
+}
+.saa-footer-heading {
+  color: var(--saa-gold);
+  font-size: 1.05rem;
+}
+.saa-footer-links a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 0.4rem;
+}
+.saa-footer-links a:hover {
+  color: var(--saa-gold);
+}
+.saa-social-links a {
+  color: var(--saa-white);
+  margin-right: 0.75rem;
+}
+.saa-footer-divider {
+  border-color: rgba(255, 255, 255, 0.2);
+  margin: 2rem 0 1rem;
+}
+
+/* --------------------------------------------------------------------
+   Empty / 404 states
+   -------------------------------------------------------------------- */
+.saa-empty-state {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: var(--saa-muted);
+}

@@ -1,0 +1,10 @@
+{
+    "name": "southeastern-archdeaconry/website",
+    "description": "Southeastern Archdeaconry, Episcopal Church of Liberia — website and admin dashboard",
+    "type": "project",
+    "license": "proprietary",
+    "require": {
+        "php": ">=8.2",
+        "phpmailer/phpmailer": "^6.9"
+    }
+}

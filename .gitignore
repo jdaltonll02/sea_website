@@ -1,0 +1,28 @@
+# Environment / secrets — never commit real credentials
+.env
+
+# Composer dependencies — restored via `composer install` (see composer.json)
+/vendor/
+
+# User-uploaded content — runtime data, not source; subfolders are created
+# on demand by handle_file_upload(). Keep the security .htaccess files though.
+/public/uploads/*
+!/public/uploads/.htaccess
+!/public/uploads/letters
+/public/uploads/letters/*
+!/public/uploads/letters/.htaccess
+
+# Local dev-environment artifact: a Windows directory junction (public/admin
+# -> ../admin) used to work around XAMPP's htdocs subfolder routing. It's
+# machine-specific, not portable, and not meant to be committed.
+/public/admin
+
+# Editor / OS cruft
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
