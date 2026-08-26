@@ -17,7 +17,7 @@ function db(): PDO
     $host = env('DB_HOST', '127.0.0.1');
     $port = env('DB_PORT', '3306');
     $name = env('DB_NAME', 'saa_ecl');
-    $user = env('DB_USER', 'root');
+    $user = env('DB_USER');
     $pass = env('DB_PASS', '');
 
     $dsn = "mysql:host={$host};port={$port};dbname={$name};charset=utf8mb4";

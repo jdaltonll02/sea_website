@@ -6,12 +6,18 @@
 USE saa_ecl;
 
 -- Roles
+-- permissions_json keys must exactly match AVAILABLE_MODULES in admin/includes/admin-functions.php
+-- (module keys use hyphens, e.g. "pages-content" not "pages_content").
+-- SuperAdmin bypasses permissions_json entirely (has_role('SuperAdmin') is checked directly in code).
 INSERT INTO roles (name, permissions_json) VALUES
 ('SuperAdmin', '{"all": true}'),
 ('Communications', '{"blog": true, "newsletters": true, "media": true, "events": true, "testimonials": true}'),
 ('Registrar', '{"clergy": true, "churches": true, "organizations": true}'),
-('Editor', '{"blog": true, "pages_content": true}'),
-('Bishop\'s Office', '{"bishops": true, "archdeacons": true, "letters": true}');
+('Editor', '{"blog": true, "pages-content": true}'),
+('Bishop\'s Office', '{"bishops": true, "archdeacons": true, "letters": true}'),
+('Administrator', '{"bishops": true, "archdeacons": true, "letters": true, "clergy": true, "churches": true, "organizations": true, "blog": true, "newsletters": true, "events": true, "media": true, "testimonials": true, "pages-content": true, "employees": true, "settings": true, "activity-log": true}'),
+('Bishop', '{"bishops": true, "archdeacons": true, "letters": true}'),
+('Media', '{"media": true}');
 
 -- Default SuperAdmin user (password: ChangeMe123! — CHANGE IMMEDIATELY AFTER FIRST LOGIN)
 -- Hash generated with password_hash('ChangeMe123!', PASSWORD_BCRYPT)

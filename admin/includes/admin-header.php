@@ -37,7 +37,7 @@ $flashMsg = get_flash();
         <form action="<?= e(base_url('pages/search.php')) ?>" method="get" class="d-none d-md-block">
           <input type="search" name="q" class="form-control form-control-sm" placeholder="Global search...">
         </form>
-        <span class="text-muted small"><?= e(current_user()['name'] ?? '') ?></span>
+        <a href="<?= e(base_url('admin/account.php')) ?>" class="text-muted small text-decoration-none"><i class="bi bi-person-circle me-1"></i><?= e(current_user()['name'] ?? '') ?></a>
         <a href="<?= e(base_url('admin/logout.php')) ?>" class="btn btn-sm btn-outline-danger">Log Out</a>
       </div>
     </header>

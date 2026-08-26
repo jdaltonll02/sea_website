@@ -45,7 +45,10 @@ include __DIR__ . '/../../includes/admin-header.php';
     <input type="text" name="q" class="form-control" placeholder="Search users..." value="<?= e($q) ?>">
     <button class="btn btn-outline-secondary" type="submit">Search</button>
   </form>
-  <a href="form.php" class="btn saa-btn-accent"><i class="bi bi-plus-lg me-1"></i>Add User</a>
+  <div class="d-flex gap-2">
+    <a href="roles.php" class="btn btn-outline-secondary"><i class="bi bi-shield-lock me-1"></i>Manage Roles</a>
+    <a href="form.php" class="btn saa-btn-accent"><i class="bi bi-plus-lg me-1"></i>Add User</a>
+  </div>
 </div>
 
 <div class="card admin-stat-card">
@@ -101,33 +104,9 @@ include __DIR__ . '/../../includes/admin-header.php';
   </nav>
 <?php endif; ?>
 
-<h5 class="mt-4 mb-3">Roles Reference</h5>
-<p class="text-muted small">Roles and their permissions are seed-managed. This table is read-only in this release.</p>
-<div class="card admin-stat-card">
-  <div class="table-responsive">
-    <table class="table mb-0 align-middle">
-      <thead>
-        <tr><th>Role</th><th>Permissions</th><th>Created</th></tr>
-      </thead>
-      <tbody>
-        <?php if (empty($roles)): ?>
-          <tr><td colspan="3" class="text-center text-muted py-4">No roles found.</td></tr>
-        <?php else: foreach ($roles as $role): ?>
-          <tr>
-            <td class="fw-semibold"><?= e($role['name']) ?></td>
-            <td>
-              <?php if ($role['permissions_json']): ?>
-                <pre class="mb-0 small" style="white-space:pre-wrap;"><?= e(json_encode(json_decode($role['permissions_json'], true), JSON_PRETTY_PRINT)) ?></pre>
-              <?php else: ?>
-                <span class="text-muted">—</span>
-              <?php endif; ?>
-            </td>
-            <td><?= e(format_date($role['created_at'], 'M j, Y')) ?></td>
-          </tr>
-        <?php endforeach; endif; ?>
-      </tbody>
-    </table>
-  </div>
-</div>
+<h5 class="mt-4 mb-3">Roles</h5>
+<p class="text-muted small">
+  <?= count($roles) ?> role(s) configured — <a href="roles.php">manage roles and their module permissions</a>.
+</p>
 
 <?php include __DIR__ . '/../../includes/admin-footer.php'; ?>

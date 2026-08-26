@@ -8,35 +8,57 @@ require_once __DIR__ . '/../../public/includes/helpers.php';
 require_once __DIR__ . '/../../public/includes/auth.php';
 
 /**
- * Which non-SuperAdmin roles may access each admin module.
- * SuperAdmin always has access to everything (checked separately in has_role()).
+ * Every admin module a role's permissions can grant, with the human-readable
+ * label used when building/editing a role's permission set.
  */
-const MODULE_ROLES = [
-    'bishops' => ['Bishop\'s Office'],
-    'archdeacons' => ['Bishop\'s Office'],
-    'letters' => ['Bishop\'s Office'],
-    'clergy' => ['Registrar'],
-    'churches' => ['Registrar'],
-    'organizations' => ['Registrar'],
-    'blog' => ['Communications', 'Editor'],
-    'newsletters' => ['Communications'],
-    'events' => ['Communications'],
-    'media' => ['Communications'],
-    'testimonials' => ['Communications'],
-    'pages-content' => ['Editor'],
-    'employees' => [],
-    'users' => [],
-    'settings' => [],
-    'activity-log' => [],
+const AVAILABLE_MODULES = [
+    'bishops' => 'Bishops',
+    'archdeacons' => 'Archdeacons',
+    'letters' => 'Letters & Documents',
+    'clergy' => 'Clergy Registry',
+    'churches' => 'Churches',
+    'organizations' => 'Organizations',
+    'blog' => 'Blog',
+    'newsletters' => 'Newsletters',
+    'events' => 'Events & Calendar',
+    'media' => 'Media Library',
+    'testimonials' => 'Testimonials',
+    'pages-content' => 'Static Pages',
+    'employees' => 'Employees',
+    'users' => 'Users & Roles',
+    'settings' => 'Settings',
+    'activity-log' => 'Activity Log',
 ];
+
+/**
+ * A role's granted modules, decoded from roles.permissions_json.
+ * Cached per request per role — roles.permissions_json is the single source
+ * of truth for non-SuperAdmin access; SuperAdmin bypasses this entirely.
+ */
+function role_permissions(int $roleId): array
+{
+    static $cache = [];
+    if (!array_key_exists($roleId, $cache)) {
+        $stmt = db()->prepare('SELECT permissions_json FROM roles WHERE id = :id');
+        $stmt->execute(['id' => $roleId]);
+        $json = $stmt->fetchColumn();
+        $decoded = $json ? json_decode($json, true) : null;
+        $cache[$roleId] = is_array($decoded) ? $decoded : [];
+    }
+    return $cache[$roleId];
+}
 
 function can_access_module(string $moduleKey): bool
 {
     if (has_role('SuperAdmin')) {
         return true;
     }
-    $allowed = MODULE_ROLES[$moduleKey] ?? [];
-    return has_role(...$allowed);
+    $user = current_user();
+    if (!$user) {
+        return false;
+    }
+    $permissions = role_permissions((int) $user['role_id']);
+    return !empty($permissions[$moduleKey]);
 }
 
 function require_module_access(string $moduleKey): void
