@@ -16,24 +16,16 @@ if ($id) {
     }
 }
 
-$isSuperAdmin = $role && $role['name'] === 'SuperAdmin';
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require_csrf();
-
-    if ($isSuperAdmin) {
-        flash('error', 'The SuperAdmin role cannot be edited — it always has unconditional access.');
-        redirect('/admin/modules/users/roles.php');
-    }
 
     $name = trim($_POST['name'] ?? '');
     $selectedModules = array_intersect($_POST['modules'] ?? [], array_keys(AVAILABLE_MODULES));
 
     if ($name === '') {
         $errors[] = 'Role name is required.';
-    } elseif ($name === 'SuperAdmin') {
-        $errors[] = '"SuperAdmin" is reserved and cannot be used for another role.';
     }
 
     if (empty($errors)) {
@@ -64,10 +56,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $currentModules = [];
-if ($role && !$isSuperAdmin) {
+if ($role) {
     $decoded = $role['permissions_json'] ? json_decode($role['permissions_json'], true) : [];
     $currentModules = is_array($decoded) ? array_keys(array_filter($decoded)) : [];
-} elseif (!$role) {
+} else {
     // reflect what was just submitted if validation failed, so checkboxes don't reset
     $currentModules = $_POST['modules'] ?? [];
 }
@@ -82,38 +74,33 @@ include __DIR__ . '/../../includes/admin-header.php';
   <div class="alert alert-danger"><ul class="mb-0"><?php foreach ($errors as $err): ?><li><?= e($err) ?></li><?php endforeach; ?></ul></div>
 <?php endif; ?>
 
-<?php if ($isSuperAdmin): ?>
-  <div class="alert alert-info">SuperAdmin has unconditional access to every module in the code itself — there's nothing to configure here.</div>
-  <a href="roles.php" class="btn btn-outline-secondary">Back to Roles</a>
-<?php else: ?>
-  <form method="post" class="card admin-stat-card">
-    <div class="card-body">
-      <?= csrf_field() ?>
-      <?php if ($role): ?><input type="hidden" name="id" value="<?= (int) $role['id'] ?>"><?php endif; ?>
+<form method="post" class="card admin-stat-card">
+  <div class="card-body">
+    <?= csrf_field() ?>
+    <?php if ($role): ?><input type="hidden" name="id" value="<?= (int) $role['id'] ?>"><?php endif; ?>
 
-      <div class="mb-3">
-        <label class="form-label">Role Name</label>
-        <input type="text" name="name" class="form-control" value="<?= e($role['name'] ?? '') ?>" required>
-      </div>
+    <div class="mb-3">
+      <label class="form-label">Role Name</label>
+      <input type="text" name="name" class="form-control" value="<?= e($role['name'] ?? '') ?>" required>
+    </div>
 
-      <label class="form-label">Modules Granted</label>
-      <p class="text-muted small">Check every admin module this role should be able to access. Granting <strong>Users &amp; Roles</strong> lets this role manage every account and role, including assigning SuperAdmin — grant it carefully.</p>
-      <div class="row g-2 mb-3">
-        <?php foreach (AVAILABLE_MODULES as $key => $label): ?>
-          <div class="col-md-4">
-            <div class="form-check">
-              <input type="checkbox" name="modules[]" id="mod_<?= e($key) ?>" class="form-check-input" value="<?= e($key) ?>" <?= in_array($key, $currentModules, true) ? 'checked' : '' ?>>
-              <label class="form-check-label" for="mod_<?= e($key) ?>"><?= e($label) ?></label>
-            </div>
+    <label class="form-label">Modules Granted</label>
+    <p class="text-muted small">Check every admin module this role should be able to access. Granting <strong>Users &amp; Roles</strong> lets this role manage every account and every other role — grant it carefully. This has no effect on SuperAdmin access, which is configured separately via <code>SUPERADMIN_EMAILS</code> in <code>.env</code>.</p>
+    <div class="row g-2 mb-3">
+      <?php foreach (AVAILABLE_MODULES as $key => $label): ?>
+        <div class="col-md-4">
+          <div class="form-check">
+            <input type="checkbox" name="modules[]" id="mod_<?= e($key) ?>" class="form-check-input" value="<?= e($key) ?>" <?= in_array($key, $currentModules, true) ? 'checked' : '' ?>>
+            <label class="form-check-label" for="mod_<?= e($key) ?>"><?= e($label) ?></label>
           </div>
-        <?php endforeach; ?>
-      </div>
+        </div>
+      <?php endforeach; ?>
     </div>
-    <div class="card-footer d-flex justify-content-between">
-      <a href="roles.php" class="btn btn-outline-secondary">Cancel</a>
-      <button type="submit" class="btn saa-btn-accent">Save Role</button>
-    </div>
-  </form>
-<?php endif; ?>
+  </div>
+  <div class="card-footer d-flex justify-content-between">
+    <a href="roles.php" class="btn btn-outline-secondary">Cancel</a>
+    <button type="submit" class="btn saa-btn-accent">Save Role</button>
+  </div>
+</form>
 
 <?php include __DIR__ . '/../../includes/admin-footer.php'; ?>

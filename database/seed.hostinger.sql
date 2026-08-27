@@ -15,7 +15,7 @@
 
 -- Roles
 INSERT INTO roles (name, permissions_json) VALUES
-('SuperAdmin', '{"all": true}'),
+('SuperAdmin', '{"bishops": true, "archdeacons": true, "letters": true, "clergy": true, "churches": true, "organizations": true, "blog": true, "newsletters": true, "events": true, "media": true, "testimonials": true, "pages-content": true, "employees": true, "users": true, "settings": true, "activity-log": true}'),
 ('Communications', '{"blog": true, "newsletters": true, "media": true, "events": true, "testimonials": true}'),
 ('Registrar', '{"clergy": true, "churches": true, "organizations": true}'),
 ('Editor', '{"blog": true, "pages-content": true}'),

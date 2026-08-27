@@ -25,6 +25,31 @@ function has_role(string ...$roleNames): bool
     return $user !== null && in_array($user['role_name'], $roleNames, true);
 }
 
+/**
+ * SuperAdmin is granted purely by email address, configured via SUPERADMIN_EMAILS
+ * in .env (comma-separated) — not by any role stored in the database. This means
+ * the highest privilege level can never be granted through the dashboard UI,
+ * regardless of what any role's permissions_json says or who has access to the
+ * Users & Roles module.
+ */
+function is_superadmin(): bool
+{
+    $user = current_user();
+    if ($user === null || empty($user['email'])) {
+        return false;
+    }
+
+    $configured = array_filter(array_map('trim', explode(',', env('SUPERADMIN_EMAILS', ''))));
+    $email = strtolower($user['email']);
+
+    foreach ($configured as $allowed) {
+        if (strtolower($allowed) === $email) {
+            return true;
+        }
+    }
+    return false;
+}
+
 /** Attempt to log a user in. Returns true on success, false on invalid credentials or lockout. */
 function attempt_login(string $email, string $password): bool
 {
@@ -93,7 +118,7 @@ function require_login(): void
 function require_role(string ...$roleNames): void
 {
     require_login();
-    if (!has_role(...$roleNames) && !has_role('SuperAdmin')) {
+    if (!has_role(...$roleNames) && !is_superadmin()) {
         http_response_code(403);
         exit('You do not have permission to access this page.');
     }

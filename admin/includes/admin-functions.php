@@ -33,7 +33,8 @@ const AVAILABLE_MODULES = [
 /**
  * A role's granted modules, decoded from roles.permissions_json.
  * Cached per request per role — roles.permissions_json is the single source
- * of truth for non-SuperAdmin access; SuperAdmin bypasses this entirely.
+ * of truth for module access. SuperAdmin (see is_superadmin() in auth.php,
+ * configured via SUPERADMIN_EMAILS in .env) bypasses this entirely.
  */
 function role_permissions(int $roleId): array
 {
@@ -50,7 +51,7 @@ function role_permissions(int $roleId): array
 
 function can_access_module(string $moduleKey): bool
 {
-    if (has_role('SuperAdmin')) {
+    if (is_superadmin()) {
         return true;
     }
     $user = current_user();

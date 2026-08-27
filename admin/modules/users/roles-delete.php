@@ -17,8 +17,6 @@ $role = $stmt->fetch();
 
 if (!$role) {
     flash('error', 'Role not found.');
-} elseif ($role['name'] === 'SuperAdmin') {
-    flash('error', 'The SuperAdmin role cannot be deleted.');
 } else {
     $countStmt = $pdo->prepare('SELECT COUNT(*) FROM users WHERE role_id = :id');
     $countStmt->execute(['id' => $id]);

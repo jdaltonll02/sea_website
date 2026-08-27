@@ -40,6 +40,7 @@ Hybrid informational + CMS-driven website for the Southeastern Archdeaconry (PHP
    ```sql
    UPDATE users SET password_hash = '<paste hash>' WHERE email = 'admin@southeasternarchdeaconry.org';
    ```
+   Then set `SUPERADMIN_EMAILS` in `.env` to that same address (comma-separated for more than one) — this is what actually grants SuperAdmin access; see **Roles & permissions** below.
 5. **Run the dev server** from the `public/` directory (this is the webroot):
    ```bash
    php -S localhost:8000 -t public
@@ -50,15 +51,14 @@ Hybrid informational + CMS-driven website for the Southeastern Archdeaconry (PHP
 
 ## Admin dashboard modules
 
-All under `/admin/modules/`, each gated by role (see `MODULE_ROLES` in `admin/includes/admin-functions.php`):
+All under `/admin/modules/`, each gated by `require_module_access()` against the current user's role.
 
-| Module | Roles (besides SuperAdmin, which sees everything) |
-|---|---|
-| Bishops, Archdeacons, Letters | Bishop's Office |
-| Clergy, Churches, Organizations | Registrar |
-| Blog, Static Pages | Communications, Editor |
-| Newsletters, Events, Media, Testimonials | Communications |
-| Employees, Users & Roles, Settings, Activity Log | SuperAdmin only |
+## Roles & permissions
+
+- **SuperAdmin is configured only in `.env`**, via `SUPERADMIN_EMAILS` (comma-separated). It is *not* a role in the database and cannot be granted through the dashboard under any circumstances — `is_superadmin()` in `public/includes/auth.php` checks the logged-in user's email against this list and bypasses all other permission checks. This is deliberate: it means the highest privilege level can't be escalated to via a UI bug, a misconfigured role, or anyone with access to the Users & Roles module.
+- Every other role is fully dynamic and lives in the `roles` table (`permissions_json`, a flat map of module-key → `true`). Manage roles at **Admin → Users & Roles → Manage Roles** — create/edit a role by checking which of the 16 modules it should grant (`AVAILABLE_MODULES` in `admin/includes/admin-functions.php`), no code changes needed. A role can't be deleted while any user is still assigned to it.
+- Seeded roles: `Communications`, `Registrar`, `Editor`, `Bishop's Office`, `Administrator`, `Bishop`, `Media` — plus a role literally named `SuperAdmin`, which despite the name is just an ordinary role now (it only matters for a user assigned to it whose email *isn't* in `SUPERADMIN_EMAILS`).
+- Any admin, regardless of role, can view their own email and change their own password at **Admin → (their name in the top bar) → My Account** (`admin/account.php`) — no SQL required.
 
 Notes on a few modules:
 - **Events** also manages the liturgical calendar (`lectionary.php`/`lectionary-form.php` alongside `index.php`/`form.php`).

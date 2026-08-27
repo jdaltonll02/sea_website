@@ -8,9 +8,12 @@ USE saa_ecl;
 -- Roles
 -- permissions_json keys must exactly match AVAILABLE_MODULES in admin/includes/admin-functions.php
 -- (module keys use hyphens, e.g. "pages-content" not "pages_content").
--- SuperAdmin bypasses permissions_json entirely (has_role('SuperAdmin') is checked directly in code).
+-- NOTE: SuperAdmin access is granted ONLY via SUPERADMIN_EMAILS in .env (see is_superadmin()
+-- in public/includes/auth.php) — it is NOT tied to this "SuperAdmin"-named role in any way.
+-- This role is just an ordinary, editable/deletable role like any other; its permissions below
+-- only matter for whichever user is assigned to it who is NOT also a configured SuperAdmin email.
 INSERT INTO roles (name, permissions_json) VALUES
-('SuperAdmin', '{"all": true}'),
+('SuperAdmin', '{"bishops": true, "archdeacons": true, "letters": true, "clergy": true, "churches": true, "organizations": true, "blog": true, "newsletters": true, "events": true, "media": true, "testimonials": true, "pages-content": true, "employees": true, "users": true, "settings": true, "activity-log": true}'),
 ('Communications', '{"blog": true, "newsletters": true, "media": true, "events": true, "testimonials": true}'),
 ('Registrar', '{"clergy": true, "churches": true, "organizations": true}'),
 ('Editor', '{"blog": true, "pages-content": true}'),

@@ -78,6 +78,15 @@ include __DIR__ . '/includes/admin-header.php';
   <div class="alert alert-danger"><ul class="mb-0"><?php foreach ($errors as $err): ?><li><?= e($err) ?></li><?php endforeach; ?></ul></div>
 <?php endif; ?>
 
+<?php if (is_superadmin()): ?>
+  <div class="alert alert-warning">
+    Your SuperAdmin access comes from this email address being listed in <code>SUPERADMIN_EMAILS</code> in <code>.env</code>
+    on the server — not from your role below. If you change your email here to one that isn't in that list, you'll lose
+    SuperAdmin access immediately (you'll fall back to whatever your assigned role grants). To keep SuperAdmin under a
+    new address, update <code>SUPERADMIN_EMAILS</code> on the server to match before or after changing it here.
+  </div>
+<?php endif; ?>
+
 <form method="post" class="card admin-stat-card" style="max-width: 560px;">
   <div class="card-body">
     <?= csrf_field() ?>
